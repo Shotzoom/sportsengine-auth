@@ -1,0 +1,20 @@
+{
+  "name": "se-auth",
+  "version": "0.0.0",
+  "description": "Sports engine OAuth flow.",
+  "main": "./lib/se.js",
+  "module": "./lib/se.es.js",
+  "browser": "./bin/se.js",
+  "types": "./types/se.d.ts",
+  "author": "Brenden Snyder <rstone770@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "rollup --config"
+  },
+  "devDependencies": {
+    "rollup": "^0.60.7",
+    "rollup-plugin-typescript2": "^0.15.0",
+    "typescript": "^2.9.2"
+  }
+}
