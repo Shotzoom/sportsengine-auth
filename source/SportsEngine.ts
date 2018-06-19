@@ -14,6 +14,9 @@ interface SportsEngineConfig {
 export default class SportsEngine {
   private config: SportsEngineConfig;
   private auth: AuthService;
+  public version: string = 'ASSEMBLY_VERSION';
+
+  public static version = 'ASSEMBLY_VERSION';
 
   public constructor(config: SportsEngineConfig) {
     if (config == null) {
