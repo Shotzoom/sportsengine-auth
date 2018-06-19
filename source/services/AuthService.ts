@@ -1,5 +1,10 @@
 import * as auth from './AuthService/auth';
 
+interface LoginResponse {
+  code: string,
+  nonce: string
+}
+
 interface LoginResult {
   success: boolean,
   code: string
@@ -25,12 +30,23 @@ export default class AuthService {
       throw new TypeError('Expected callback.');
     }
 
-    auth.request({
-      id: request.id,
-      authorize: request.authorize,
-      callback: request.callback
-    }, (error, response) => {
-      cb(error, { code: response.code, success: response.success });
-    });
+    auth.request(
+      {
+        id: request.id,
+        authorize: request.authorize,
+        callback: request.callback
+      },
+      (error, response) => {
+        cb(error, { code: response.code, success: response.success });
+      }
+    );
+  }
+
+  public respond(response: LoginResponse, ): void {
+    if (response == null) {
+      throw new TypeError('Expected response.');
+    }
+
+    auth.respond({ code: response.code, nonce: response.nonce });
   }
 }
