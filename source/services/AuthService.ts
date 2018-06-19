@@ -37,7 +37,11 @@ export default class AuthService {
         callback: request.callback
       },
       (error, response) => {
-        cb(error, { code: response.code, success: response.success });
+        if (error) {
+          cb(error, null);
+        } else {
+          cb(null, { code: response.code, success: response.success });
+        }
       }
     );
   }

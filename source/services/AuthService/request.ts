@@ -25,10 +25,10 @@ interface Response {
 }
 
 class Request {
-  private _config: RequestConfig;
-  private _callback: RequestCallback;
-  private _state: RequestState = RequestState.Idle;
-  private _nonce: string = uid();
+  private config: RequestConfig;
+  private callback: RequestCallback;
+  private state: RequestState = RequestState.Idle;
+  private nonce: string = uid();
 
   public constructor(config: RequestConfig, callback: RequestCallback) {
     if (config == null) {
@@ -39,52 +39,52 @@ class Request {
       throw new TypeError('Expected a request callback.');
     }
 
-    this._config = config;
-    this._callback = callback;
+    this.config = config;
+    this.callback = callback;
   }
 
   public get uri(): string {
     const query = qs.stringify({
-      state: this._nonce,
+      state: this.nonce,
       response_type: 'code',
-      client_id: this._config.id,
-      redirect_uri: this._config.callback
+      client_id: this.config.id,
+      redirect_uri: this.config.callback
     });
 
-    return `${this._config.authorize}?${query}`;
+    return `${this.config.authorize}?${query}`;
   }
 
   public send() {
-    if (this._state === RequestState.Idle) {
-      this._state = RequestState.Pending;
+    if (this.state === RequestState.Idle) {
+      this.state = RequestState.Pending;
 
       send(this.uri, (error, response) => {
         if (error != null) {
-          this._reject(error);
-        } else {
+          this.reject(error);
+        } else if (response.nonce === this.nonce) {
           switch (response.kind) {
             case MessageKind.Code:
-              this._resolve({ success: true, code: response.data });
+              this.resolve({ success: true, code: response.data });
               break;
             default:
-              this._resolve({ success: false, code: '' });
+              this.resolve({ success: false, code: '' });
           }
         }
       });
     }
   }
 
-  private _reject(error: Error) {
-    if (this._state !== RequestState.Complete) {
-      this._state = RequestState.Complete;
-      this._callback(error, null);
+  private reject(error: Error) {
+    if (this.state !== RequestState.Complete) {
+      this.state = RequestState.Complete;
+      this.callback(error, null);
     }
   }
 
-  private _resolve(response: Response) {
-    if (this._state !== RequestState.Complete) {
-      this._state = RequestState.Complete;
-      this._callback(null, response);
+  private resolve(response: Response) {
+    if (this.state !== RequestState.Complete) {
+      this.state = RequestState.Complete;
+      this.callback(null, response);
     }
   }
 }
