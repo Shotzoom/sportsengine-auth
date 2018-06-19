@@ -1,5 +1,5 @@
 {
-  "name": "se-auth",
+  "name": "sportsengine",
   "version": "0.0.0",
   "description": "Sports engine OAuth flow.",
   "main": "./lib/se.js",
