@@ -1,18 +1,26 @@
 {
-  "name": "sportsengine",
+  "name": "sportsengine-auth",
   "version": "1.0.0",
   "description": "Sports engine OAuth flow.",
   "main": "./lib/se.js",
   "module": "./lib/se.es.js",
   "browser": "./bin/se.js",
-  "types": "./types/se.d.ts",
+  "types": "./types/SportsEngine.d.ts",
   "author": "Brenden Snyder <rstone770@gmail.com>",
   "license": "MIT",
   "private": false,
+  "files": [
+    "bin",
+    "lib",
+    "types",
+    "README.md"
+  ],
   "scripts": {
+    "release": "npm run lint && npm run build",
     "build": "rollup --config",
     "lint": "tslint --config tslint.json source/**/*.ts",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "prepublish": "npm run release"
   },
   "devDependencies": {
     "rollup": "^0.60.7",
