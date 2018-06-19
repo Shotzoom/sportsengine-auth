@@ -2,13 +2,11 @@ import listen from "../../utils/listen";
 import poll from "../../utils/poll";
 import Message, { MessageKind } from "./Message";
 
-interface ChannelCallback {
-  (error: Error, message: Message): void
-}
+type ChannelCallback = (error: Error, message: Message) => void;
 
 const WINDOW_FEATURES = {
   width: 600,
-  height: 800
+  height: 800,
 };
 
 function getWindowFeatures() {
@@ -27,12 +25,12 @@ class PopupChannel {
   private unlisten: () => void;
 
   public constructor(uri: string, callback: ChannelCallback) {
-    if (uri == null || uri === '') {
-      throw new TypeError('Expected a uri.');
+    if (uri == null || uri === "") {
+      throw new TypeError("Expected a uri.");
     }
 
     if (callback == null) {
-      throw new TypeError('Expected callback.');
+      throw new TypeError("Expected callback.");
     }
 
     this.uri = uri;
@@ -41,8 +39,8 @@ class PopupChannel {
 
   public send(): void {
     if (this.closed) {
-      this.window = window.open(this.uri, 'SportsEngine Authorization', getWindowFeatures());
-      this.unlisten = listen(window, 'message', (e) => this.onMessage(<MessageEvent>e), false);
+      this.window = window.open(this.uri, "SportsEngine Authorization", getWindowFeatures());
+      this.unlisten = listen(window, "message", (e) => this.onMessage(e as MessageEvent), false);
       this.closed = false;
       poll(() => this.window.closed, () => this.onClose());
     }
@@ -71,7 +69,7 @@ class PopupChannel {
     if (e.origin === window.location.origin) {
       try {
         this.receive(null, Message.fromJSON(e.data));
-      } catch(e) {
+      } catch (e) {
         this.receive(e, null);
       }
     }

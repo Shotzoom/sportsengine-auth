@@ -1,7 +1,7 @@
 export enum MessageKind {
   Uknown,
   Cancel,
-  Code
+  Code,
 }
 
 export default class Message {
@@ -9,16 +9,16 @@ export default class Message {
   public nonce: string;
   public data: any;
 
-  public constructor (kind: MessageKind, nonce: string, data: any) {
+  public constructor(kind: MessageKind, nonce: string, data: any) {
     this.kind = kind;
     this.nonce = nonce;
     this.data = data;
   }
 
-  static fromJSON(value: string) {
+  public static fromJSON(value: string) {
     const message = JSON.parse(value);
     let kind = MessageKind.Uknown;
-    let nonce = '';
+    let nonce = "";
     let data = {};
 
     if (message != null) {

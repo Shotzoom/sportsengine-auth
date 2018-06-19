@@ -1,26 +1,25 @@
-interface QueryStringValues {
-  [key: string]: string
+interface IQueryStringValues {
+  [key: string]: string;
 }
 
-export function stringify(values: QueryStringValues): string {
+export function stringify(values: IQueryStringValues): string {
   if (values == null) {
-    return '';
+    return "";
   }
 
   const keys = Object.keys(values);
   const parameters = [];
 
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
+  for (const key of keys) {
     const value = values[key];
 
     parameters.push(
       [
         encodeURIComponent(key),
         encodeURIComponent(value)
-      ].join('=')
+      ].join("=")
     );
   }
 
-  return parameters.join('&');
+  return parameters.join("&");
 }

@@ -10,12 +10,15 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "rollup --config"
+    "build": "rollup --config",
+    "lint": "tslint --config tslint.json source/**/*.ts",
+    "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {
     "rollup": "^0.60.7",
     "rollup-plugin-replace": "^2.0.0",
     "rollup-plugin-typescript2": "^0.15.0",
+    "tslint": "^5.10.0",
     "typescript": "^2.9.2"
   }
 }

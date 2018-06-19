@@ -1,27 +1,25 @@
-import * as qs from '../../utils/qs';
+import * as qs from "../../utils/qs";
 import { uid } from "../../utils/uid";
+import { MessageKind } from "./Message";
 import { send } from "./send";
-import { MessageKind } from './Message';
 
 interface RequestConfig {
-  id: string,
-  callback: string,
-  authorize: string
+  id: string;
+  callback: string;
+  authorize: string;
 }
 
-interface RequestCallback {
-  (error: Error, response: Response): void
-}
+type RequestCallback = (error: Error, response: Response) => void;
 
 enum RequestState {
   Idle,
   Pending,
-  Complete
+  Complete,
 }
 
 interface Response {
-  success: boolean,
-  code: string
+  success: boolean;
+  code: string;
 }
 
 class Request {
@@ -32,11 +30,11 @@ class Request {
 
   public constructor(config: RequestConfig, callback: RequestCallback) {
     if (config == null) {
-      throw new TypeError('Expected a request config.');
+      throw new TypeError("Expected a request config.");
     }
 
     if (callback == null) {
-      throw new TypeError('Expected a request callback.');
+      throw new TypeError("Expected a request callback.");
     }
 
     this.config = config;
@@ -46,9 +44,9 @@ class Request {
   public get uri(): string {
     const query = qs.stringify({
       state: this.nonce,
-      response_type: 'code',
+      response_type: "code",
       client_id: this.config.id,
-      redirect_uri: this.config.callback
+      redirect_uri: this.config.callback,
     });
 
     return `${this.config.authorize}?${query}`;
@@ -67,7 +65,7 @@ class Request {
               this.resolve({ success: true, code: response.data });
               break;
             default:
-              this.resolve({ success: false, code: '' });
+              this.resolve({ success: false, code: "" });
           }
         }
       });

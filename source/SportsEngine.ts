@@ -1,26 +1,26 @@
 import AuthService from "./services/AuthService";
 
 interface LoginResult {
-  code: string,
-  success: boolean
+  code: string;
+  success: boolean;
 }
 
 interface SportsEngineConfig {
-  id: string,
-  callback: string,
-  authorize: string
+  authorize: string;
+  callback: string;
+  id: string;
 }
 
 export default class SportsEngine {
   private config: SportsEngineConfig;
   private auth: AuthService;
-  public version: string = 'ASSEMBLY_VERSION';
+  public version: string = "ASSEMBLY_VERSION";
 
-  public static version = 'ASSEMBLY_VERSION';
+  public static version = "ASSEMBLY_VERSION";
 
   public constructor(config: SportsEngineConfig) {
     if (config == null) {
-      throw new TypeError('Expected config.');
+      throw new TypeError("Expected config.");
     }
 
     this.config = config;
@@ -32,9 +32,9 @@ export default class SportsEngine {
       {
         id: this.config.id,
         callback: this.config.callback,
-        authorize: this.config.authorize
+        authorize: this.config.authorize,
       },
-      (error, result) => cb(error, result)
+      (error, result) => cb(error, result),
     );
   }
 }
