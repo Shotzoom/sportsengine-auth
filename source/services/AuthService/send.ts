@@ -7,11 +7,11 @@ interface ChannelCallback {
 }
 
 class PopupChannel {
-  private _uri: string;
-  private _callback: ChannelCallback;
-  private _window: Window;
-  private _closed: boolean = true;
-  private _unlisten: () => void;
+  private uri: string;
+  private callback: ChannelCallback;
+  private window: Window;
+  private closed: boolean = true;
+  private unlisten: () => void;
 
   public constructor(uri: string, callback: ChannelCallback) {
     if (uri == null || uri === '') {
@@ -22,44 +22,44 @@ class PopupChannel {
       throw new TypeError('Expected callback.');
     }
 
-    this._uri = uri;
-    this._callback = callback;
+    this.uri = uri;
+    this.callback = callback;
   }
 
   public send(): void {
-    if (this._closed) {
-      this._window = window.open(this._uri, '_blank');
-      this._unlisten = listen(window, 'message', (e) => this._onMessage(<MessageEvent>e), false);
-      this._closed = false;
-      poll(() => this._window.closed, () => this._onClose());
+    if (this.closed) {
+      this.window = window.open(this.uri, '_blank');
+      this.unlisten = listen(window, 'message', (e) => this.onMessage(<MessageEvent>e), false);
+      this.closed = false;
+      poll(() => this.window.closed, () => this.onClose());
     }
   }
 
-  private _close() {
-    if (!this._closed) {
-      this._unlisten();
-      this._window.close();
-      this._closed = true;
+  private close() {
+    if (!this.closed) {
+      this.unlisten();
+      this.window.close();
+      this.closed = true;
     }
   }
 
-  private _receive(error: Error, data: any) {
-    if (!this._closed) {
-      this._callback(error, data);
-      this._close();
+  private receive(error: Error, data: any) {
+    if (!this.closed) {
+      this.callback(error, data);
+      this.close();
     }
   }
 
-  private _onClose() {
-    this._receive(null, { kind: MessageKind.Cancel, data: null });
+  private onClose() {
+    this.receive(null, { kind: MessageKind.Cancel, data: null });
   }
 
-  private _onMessage(e: MessageEvent) {
+  private onMessage(e: MessageEvent) {
     if (e.origin === window.location.origin) {
       try {
-        this._receive(null, Message.fromJSON(e.data));
+        this.receive(null, Message.fromJSON(e.data));
       } catch(e) {
-        this._receive(e, null);
+        this.receive(e, null);
       }
     }
   }

@@ -9,5 +9,6 @@ export function uid(): string {
 
   return btoa(bytes.join(''))
     .replace('+', '-')
-    .replace('-', '_');
+    .replace('/', '_')
+    .replace('=', '');
 }
