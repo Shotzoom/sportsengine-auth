@@ -1,25 +1,25 @@
 interface IQueryStringValues {
-  [key: string]: string;
+  [key: string]: string
 }
 
-export function stringify(values: IQueryStringValues): string {
+export function stringify (values: IQueryStringValues): string {
   if (values == null) {
-    return "";
+    return ''
   }
 
-  const keys = Object.keys(values);
-  const parameters = [];
+  const keys = Object.keys(values)
+  const parameters = []
 
   for (const key of keys) {
-    const value = values[key];
+    const value = values[key]
 
     parameters.push(
       [
         encodeURIComponent(key),
         encodeURIComponent(value)
-      ].join("=")
-    );
+      ].join('=')
+    )
   }
 
-  return parameters.join("&");
+  return parameters.join('&')
 }

@@ -1,7 +1,7 @@
 export enum MessageKind {
   Uknown,
   Cancel,
-  Code,
+  Code
 }
 
 export default class Message {

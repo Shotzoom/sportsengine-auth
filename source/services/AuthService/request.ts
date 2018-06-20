@@ -14,7 +14,7 @@ type RequestCallback = (error: Error, response: Response) => void;
 enum RequestState {
   Idle,
   Pending,
-  Complete,
+  Complete
 }
 
 interface Response {

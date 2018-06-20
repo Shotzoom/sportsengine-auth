@@ -1,31 +1,31 @@
-import * as auth from "./AuthService/auth";
+import * as auth from './AuthService/auth'
 
 interface ILoginResponse {
-  code: string;
-  nonce: string;
+  code: string
+  nonce: string
 }
 
 interface ILoginResult {
-  code: string;
-  success: boolean;
+  code: string
+  success: boolean
 }
 
 interface ILoginRequest {
-  authorize: string;
-  callback: string;
-  id: string;
+  authorize: string
+  callback: string
+  id: string
 }
 
-type LoginCallback = (error: Error, result: ILoginResult) => void;
+type LoginCallback = (error: Error, result: ILoginResult) => void
 
 export default class AuthService {
-  public login(request: ILoginRequest, cb: LoginCallback): void {
+  public login (request: ILoginRequest, cb: LoginCallback): void {
     if (request == null) {
-      throw new TypeError("Expected login request.");
+      throw new TypeError('Expected login request.')
     }
 
     if (cb == null) {
-      throw new TypeError("Expected callback.");
+      throw new TypeError('Expected callback.')
     }
 
     auth.request(
@@ -36,19 +36,19 @@ export default class AuthService {
       },
       (error, response) => {
         if (error) {
-          cb(error, null);
+          cb(error, null)
         } else {
-          cb(null, { code: response.code, success: response.success });
+          cb(null, { code: response.code, success: response.success })
         }
       }
-    );
+    )
   }
 
-  public respond(response: ILoginResponse ): void {
+  public respond (response: ILoginResponse): void {
     if (response == null) {
-      throw new TypeError("Expected response.");
+      throw new TypeError('Expected response.')
     }
 
-    auth.respond({ code: response.code, nonce: response.nonce });
+    auth.respond({ code: response.code, nonce: response.nonce })
   }
 }

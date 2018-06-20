@@ -32,7 +32,7 @@ export default class SportsEngine {
       {
         id: this.config.id,
         callback: this.config.callback,
-        authorize: this.config.authorize,
+        authorize: this.config.authorize
       },
       (error, result) => cb(error, result),
     );

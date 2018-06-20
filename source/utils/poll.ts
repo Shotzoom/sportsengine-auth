@@ -1,11 +1,11 @@
-export default function poll(
+export default function poll (
   predicate: () => boolean,
   cb: () => void
 ): void {
   const interval = setInterval(() => {
     if (predicate()) {
-      clearInterval(interval);
-      cb();
+      clearInterval(interval)
+      cb()
     }
-  });
+  })
 }
