@@ -19,14 +19,23 @@ function getWindowFeatures() {
 
 class PopupChannel {
   private uri: string;
+  private nonce: string;
   private callback: ChannelCallback;
   private window: Window;
   private closed: boolean = true;
   private unlisten: () => void;
 
-  public constructor(uri: string, callback: ChannelCallback) {
+  public constructor(
+    uri: string,
+    nonce: string,
+    callback: ChannelCallback
+  ) {
     if (uri == null || uri === "") {
       throw new TypeError("Expected a uri.");
+    }
+
+    if (nonce == null || nonce === "") {
+      throw new TypeError("Expected a nonce.");
     }
 
     if (callback == null) {
@@ -34,6 +43,7 @@ class PopupChannel {
     }
 
     this.uri = uri;
+    this.nonce = nonce;
     this.callback = callback;
   }
 
@@ -62,13 +72,17 @@ class PopupChannel {
   }
 
   private onClose() {
-    this.receive(null, { kind: MessageKind.Cancel, data: null });
+    this.receive(null, new Message(MessageKind.Cancel, this.nonce, null));
   }
 
   private onMessage(e: MessageEvent) {
     if (e.origin === window.location.origin) {
       try {
-        this.receive(null, Message.fromJSON(e.data));
+        const message = Message.fromJSON(e.data);
+
+        if (message.nonce === this.nonce) {
+          this.receive(null, message);
+        }
       } catch (e) {
         this.receive(e, null);
       }
@@ -76,6 +90,10 @@ class PopupChannel {
   }
 }
 
-export function send(uri: string, cb: (error: Error, message: Message) => void): void {
-  new PopupChannel(uri, cb).send();
+export function send(
+  uri: string,
+  nonce: string,
+  cb: (error: Error, message: Message) => void
+): void {
+  new PopupChannel(uri, nonce, cb).send();
 }

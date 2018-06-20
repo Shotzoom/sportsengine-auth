@@ -56,10 +56,10 @@ class Request {
     if (this.state === RequestState.Idle) {
       this.state = RequestState.Pending;
 
-      send(this.uri, (error, response) => {
+      send(this.uri, this.nonce, (error, response) => {
         if (error != null) {
           this.reject(error);
-        } else if (response.nonce === this.nonce) {
+        } else {
           switch (response.kind) {
             case MessageKind.Code:
               this.resolve({ success: true, code: response.data });
