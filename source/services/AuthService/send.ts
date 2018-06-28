@@ -49,18 +49,26 @@ class PopupChannel {
 
   public send(): void {
     if (this.closed) {
+      this.closed = false;
       this.window = window.open(this.uri, "SportsEngine Authorization", getWindowFeatures());
       this.unlisten = listen(window, "message", (e) => this.onMessage(e as MessageEvent), false);
-      this.closed = false;
-      poll(() => this.window.closed, () => this.onClose());
+
+      if (this.window != null) {
+        poll(() => this.window.closed, () => this.onClose());
+      } else {
+        this.onClose();
+      }
     }
   }
 
   private close() {
     if (!this.closed) {
-      this.unlisten();
-      this.window.close();
       this.closed = true;
+      this.unlisten();
+
+      if (this.window != null) {
+        this.window.close();
+      }
     }
   }
 
