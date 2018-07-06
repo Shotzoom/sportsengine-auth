@@ -21,7 +21,7 @@ export default function respond(response: Response, callback: ResponseCompleteCa
     throw new TypeError("Expected callback.");
   }
 
-  const message = new Message(MessageKind.Code, response.nonce, response.code);
+  const message = new Message(MessageKind.Code, response.code);
 
   if (window.opener == null) {
     callback(null, { response, success: false });

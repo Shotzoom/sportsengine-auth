@@ -26,7 +26,6 @@ class Request {
   private config: RequestConfig;
   private callback: RequestCallback;
   private state: RequestState = RequestState.Idle;
-  private nonce: string = uid();
 
   public constructor(config: RequestConfig, callback: RequestCallback) {
     if (config == null) {
@@ -43,7 +42,6 @@ class Request {
 
   public get uri(): string {
     const query = qs.stringify({
-      state: this.nonce,
       response_type: "code",
       client_id: this.config.id,
       redirect_uri: this.config.callback,
@@ -56,7 +54,7 @@ class Request {
     if (this.state === RequestState.Idle) {
       this.state = RequestState.Pending;
 
-      send(this.uri, this.nonce, (error, response) => {
+      send(this.uri, (error, response) => {
         if (error != null) {
           this.reject(error);
         } else {
