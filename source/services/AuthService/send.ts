@@ -5,8 +5,8 @@ import Message, { MessageKind } from "./Message";
 type ChannelCallback = (error: Error, message: Message) => void;
 
 const WINDOW_FEATURES = {
-  width: 600,
-  height: 800
+  height: 800,
+  width: 600
 };
 
 function getWindowFeatures() {

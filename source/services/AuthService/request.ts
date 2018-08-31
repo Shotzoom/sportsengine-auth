@@ -1,15 +1,14 @@
 import * as qs from "../../utils/qs";
-import { uid } from "../../utils/uid";
 import { MessageKind } from "./Message";
 import { send } from "./send";
 
-interface RequestConfig {
+interface IRequestConfig {
   id: string;
   callback: string;
   authorize: string;
 }
 
-type RequestCallback = (error: Error, response: Response) => void;
+type RequestCallback = (error: Error, response: IResponse) => void;
 
 enum RequestState {
   Idle,
@@ -17,17 +16,17 @@ enum RequestState {
   Complete
 }
 
-interface Response {
-  success: boolean;
+interface IResponse {
   code: string;
+  success: boolean;
 }
 
 class Request {
-  private config: RequestConfig;
+  private config: IRequestConfig;
   private callback: RequestCallback;
   private state: RequestState = RequestState.Idle;
 
-  public constructor(config: RequestConfig, callback: RequestCallback) {
+  public constructor(config: IRequestConfig, callback: RequestCallback) {
     if (config == null) {
       throw new TypeError("Expected a request config.");
     }
@@ -42,9 +41,9 @@ class Request {
 
   public get uri(): string {
     const query = qs.stringify({
-      response_type: "code",
       client_id: this.config.id,
       redirect_uri: this.config.callback,
+      response_type: "code"
     });
 
     return `${this.config.authorize}?${query}`;
@@ -77,7 +76,7 @@ class Request {
     }
   }
 
-  private resolve(response: Response) {
+  private resolve(response: IResponse) {
     if (this.state !== RequestState.Complete) {
       this.state = RequestState.Complete;
       this.callback(null, response);
@@ -85,6 +84,6 @@ class Request {
   }
 }
 
-export default function request(config: RequestConfig, cb: RequestCallback) {
+export default function request(config: IRequestConfig, cb: RequestCallback) {
   return new Request(config, cb).send();
 }

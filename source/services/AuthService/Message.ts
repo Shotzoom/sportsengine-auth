@@ -5,14 +5,6 @@ export enum MessageKind {
 }
 
 export default class Message {
-  public kind: MessageKind;
-  public data: any;
-
-  public constructor(kind: MessageKind, data: any) {
-    this.kind = kind;
-    this.data = data;
-  }
-
   public static fromJSON(value: string) {
     const message = JSON.parse(value);
     let kind = MessageKind.Uknown;
@@ -29,5 +21,13 @@ export default class Message {
     }
 
     return new Message(kind, data);
+  }
+  
+  public kind: MessageKind;
+  public data: any;
+
+  public constructor(kind: MessageKind, data: any) {
+    this.kind = kind;
+    this.data = data;
   }
 }

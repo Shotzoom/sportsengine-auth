@@ -1,18 +1,18 @@
 import Message, { MessageKind } from "./Message";
 
-interface Response {
+interface IResponse {
   code: string;
-  nonce: string;
 }
 
-interface ResponseResult {
-  response: Response;
+interface IResponseResult {
+  response: IResponse;
   success: boolean;
 }
 
-type ResponseCompleteCallback = (error: Error, result: ResponseResult) => void;
+type ResponseCompleteCallback = (error: Error, result: IResponseResult) => void;
 
-export default function respond(response: Response, callback: ResponseCompleteCallback = () => {}): void {
+// tslint:disable-next-line:no-empty
+export default function respond(response: IResponse, callback: ResponseCompleteCallback = () => {}): void {
   if (response == null) {
     throw new TypeError("Expected reponse.");
   }

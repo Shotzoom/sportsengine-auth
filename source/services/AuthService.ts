@@ -2,7 +2,6 @@ import * as auth from './AuthService/auth'
 
 interface ILoginResponse {
   code: string
-  nonce: string
 }
 
 interface ILoginResult {
@@ -49,6 +48,6 @@ export default class AuthService {
       throw new TypeError('Expected response.')
     }
 
-    auth.respond({ code: response.code, nonce: response.nonce })
+    auth.respond({ code: response.code })
   }
 }
